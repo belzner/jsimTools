@@ -11,6 +11,10 @@
     <input type="text" size="80" class="netlist">
     <input type="submit" value="Expand">
   </form>
+  <form class="connects" style="display: none;">
+    Unrecognized device: <span class="type"></span>. How many connections does it have? <input type="text" class="cnums">
+    <input type="submit" value="Set">
+  </form>
   <div class="errors"></div>
   <div class="expansion"></div>
 </body>
@@ -87,7 +91,9 @@
     expanded = expandNetlist(comps);
     connections = components[type];
     if (!connections) {
-      $('.errors').append('<p>Unknown device type ' + type + '.</p>');
+      $('input.cnums').val('');
+      $('.connects .type').text(type);
+      $('.connects').show();
       return null;
     }
     if (!expanded) {
@@ -110,17 +116,39 @@
       return null;
     }
   }
-  $('.expand').submit(function(e) {
-    e.preventDefault();
-    $('.errors').empty();
-    $('.expansion').empty();
+  function getNetlist() {
     var code = $('input.netlist').val();
     var netlist = code.split(' ').filter(function(i) {return i;});
+    return netlist;
+  }
+  function showNetlist(netlist) {
     var setup = setupNetlist(netlist[0], netlist[1], netlist.slice(2));
     if (setup) {
       for (var i = 0; i < setup.length; i++) {
+        $('.errors').empty();
         $('.expansion').append('<p>' + setup[i] + '</p>');
       }
+    }
+  }
+  $('.expand').submit(function(e) {
+    e.preventDefault();
+    $('.connects').hide();
+    $('.errors').empty();
+    $('.expansion').empty();
+    var netlist = getNetlist();
+    showNetlist(netlist);
+  });
+  $('.connects').submit(function(e) {
+    e.preventDefault();
+    var netlist = getNetlist();
+    var cnum = parseInt($('input.cnums').val());
+    if (cnum && netlist) {
+      components[netlist[1]] = cnum;
+      $('.connects').hide();
+      showNetlist(netlist);
+    }
+    else {
+      $('.errors').append('<p>You must provide an integer number of connections.</p>');
     }
   });
 </script>

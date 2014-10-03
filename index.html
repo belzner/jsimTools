@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JSim Netlist Expander</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
+</head>
+
+<body>
+  <form class="expand">
+    <input type="text" size="80" class="netlist">
+    <input type="submit" value="Expand">
+  </form>
+  <div class="errors"></div>
+  <div class="expansion"></div>
+</body>
+
+<script type="text/javascript">
+  var components = {
+    'constant'  : 1,
+    'inverter'  : 2,
+    'buffer'    : 2,
+    'tristate'  : 3,
+    'and2'      : 3,
+    'and3'      : 4,
+    'and4'      : 5,
+    'nand2'     : 3,
+    'nand3'     : 4,
+    'nand4'     : 5,
+    'or2'       : 3,
+    'or3'       : 4,
+    'or4'       : 5,
+    'nor2'      : 3,
+    'nor3'      : 4,
+    'nor4'      : 5,
+    'xor2'      : 3,
+    'xnor2'     : 3,
+    'mux2'      : 4,
+    'mux4'      : 7,
+    'dreg'      : 3
+  };
+  function expandNetlist(comps) {
+    var dupesRe = /#(\d+)/g;
+    var listRe = /\[(\d+:\d+(:\d+)?)+?\]/g;
+    var numsRe = /\d+/g;
+    var expanded = [];
+    for (var i = 0; i < comps.length; i++) {
+      numDupes = 1;
+      comp = comps[i]
+      hasDupe = comp.match(dupesRe);
+      if (hasDupe && hasDupe.length == 1) {
+        numDupes = parseInt(hasDupe[0].slice(1));
+        comp = comp.replace(dupesRe, '');
+      }
+      else if (hasDupe && hasDupe.length > 1) {
+        $('.errors').append('<p>'+ comp + ' is not a valid declaration.</p>');
+        return null;
+      }
+      iterators = comp.match(listRe);
+      expanding = [comp];
+      for (var j = (iterators) ? iterators.length-1 : -1; j >= 0; j -= 1) {
+        cur = iterators[j]
+        curIndex = comp.lastIndexOf(cur);
+        nums = _.map(cur.match(numsRe), function(num) {return parseInt(num);});
+        if (nums[0] < nums[1]) {
+          iterations = _.range(nums[0], nums[1]+1, (nums[2]) ? nums[2] : 1);
+        }
+        else if (nums[0] > nums[1]) {
+          iterations = _.range(nums[0], nums[1]-1, (nums[2]) ? -nums[2] : -1);
+        }
+        tmp = [];
+        for (var k = 0; k < iterations.length; k++) {
+          for (var l = 0; l < expanding.length; l++) {
+            tmp.push(expanding[l].slice(0, curIndex) + '[' + iterations[k] + ']' + expanding[l].slice(curIndex + cur.length));
+          }
+        }
+        expanding = tmp;
+        comp = comp.slice(0, curIndex);
+      }
+      for (j = 0; j < numDupes; j++) {
+        expanded = $.merge(expanded, expanding);
+      }
+    }
+    return expanded;
+  }
+  function setupNetlist(id, type, comps) {
+    expanded = expandNetlist(comps);
+    connections = components[type];
+    if (!connections) {
+      $('.errors').append('<p>Unknown device type ' + type + '.</p>');
+      return null;
+    }
+    if (!expanded) {
+      return null;
+    }
+    numcomps = expanded.length / connections;
+    if (numcomps == Math.floor(numcomps)) {
+      comps = [];
+      for (var i = 0; i < numcomps; i++) {
+        curcomp = id + '_' + i + ' ' + type;
+        for (var j = 0; j < connections; j++) {
+          curcomp = curcomp + ' ' + expanded[(numcomps * j) + i];
+        }
+        comps.push(curcomp);
+      }
+      return comps;
+    }
+    else {
+      $('.errors').append('<p>Expected a multiple of ' + connections + ' connections.</p>');
+      return null;
+    }
+  }
+  $('.expand').submit(function(e) {
+    e.preventDefault();
+    $('.errors').empty();
+    $('.expansion').empty();
+    var code = $('input.netlist').val();
+    var netlist = code.split(' ').filter(function(i) {return i;});
+    var setup = setupNetlist(netlist[0], netlist[1], netlist.slice(2));
+    if (setup) {
+      for (var i = 0; i < setup.length; i++) {
+        $('.expansion').append('<p>' + setup[i] + '</p>');
+      }
+    }
+  });
+</script>
+</html>

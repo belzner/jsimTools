@@ -134,7 +134,7 @@ function showNetlist(netlist) {
   if (setup) {
     for (var i = 0; i < setup.length; i++) {
       $('.errors').empty();
-      $('.expansion').append('<p>' + setup[i] + '</p>');
+      $('.expansion').append(setup[i] + '<br>');
     }
   }
 }

@@ -3,15 +3,17 @@
 <head>
   <title>JSim Netlist Expander</title>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
+  <h1>JSim Netlist Expander</h1>
   <form class="expand">
-    <input type="text" size="80" class="netlist">
+    <input type="text" class="netlist" placeholder="Xid component nodes">
     <input type="submit" value="Expand">
   </form>
-  <form class="connects" style="display: none;">
+  <form class="connects">
     Unrecognized device: <span class="type"></span>. How many connections does it have? <input type="text" class="cnums">
     <input type="submit" value="Set">
   </form>

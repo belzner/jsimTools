@@ -1,0 +1,84 @@
+body {
+  width: 70%;
+  margin: 0 auto;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+form.expand {
+  font-size: 200%;
+}
+
+input {
+  font-size: inherit;
+}
+
+.netlist {
+  border: 0;
+  outline: none;
+  border-bottom: 5px dashed #31B0D5;
+  padding: 5px;
+  box-sizing: border-box;
+  width: 79%;
+}
+
+.expand input[type=submit] {
+  box-sizing: border-box;
+  outline: none;
+  width: 19%;
+  margin-right: 0px;
+  border: 0;
+  background-color: #FFFFFF;
+  color: #31B0D5;
+  height: 53px;
+  font-weight: bold;
+}
+
+.connects {
+  text-align: center;
+  display: none;
+}
+
+.cnums {
+  border: 0;
+  outline: none;
+  border-bottom: 3px dashed #F0AD4E;
+  padding: 5px;
+  box-sizing: border-box;
+  width: 40px;
+}
+
+.connects input[type=submit] {
+  box-sizing: border-box;
+  outline: none;
+  margin-right: 0px;
+  border: 0;
+  background-color: #FFFFFF;
+  color: #F0AD4E;
+  height: 53px;
+  font-weight: bold;
+}
+
+.errors {
+  color: #D9534F;
+  text-align: center;
+}
+
+.expansion {
+  margin: 20px 50px;
+  font-size: 30px;
+  line-height: 50px;
+  color: #999999;
+}
+
+::-webkit-input-placeholder {
+  font-style: italic;
+}
+::-moz-placeholder {
+  font-style: italic;
+}
+:-ms-input-placeholder {
+  font-style: italic;
+}
+input:-moz-placeholder {
+  font-style: italic;
+}

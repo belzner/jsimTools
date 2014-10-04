@@ -89,6 +89,7 @@ function setupNetlist(id, type, comps) {
     $('input.cnums').val('');
     $('.connects .type').text(type);
     $('.connects').show();
+    $('input.cnums').focus();
     return null;
   }
   if (!flattened) {
@@ -166,4 +167,11 @@ $('.connects').submit(function(e) {
   else {
     $('.errors').append('<p>You must provide an integer number of connections.</p>');
   }
+});
+
+/*
+ * Autofocus on page load
+ */
+$(document).ready(function() {
+  $('input.netlist').focus();
 });

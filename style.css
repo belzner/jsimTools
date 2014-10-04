@@ -18,13 +18,13 @@ input {
   border-bottom: 5px dashed #31B0D5;
   padding: 5px;
   box-sizing: border-box;
-  width: 79%;
+  width: calc(99% - 140px);
 }
 
 .expand input[type=submit] {
   box-sizing: border-box;
   outline: none;
-  width: 19%;
+  width: 140px;
   margin-right: 0px;
   border: 0;
   background-color: #FFFFFF;

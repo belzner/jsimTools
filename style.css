@@ -1,61 +1,94 @@
-body {
-  width: 70%;
-  margin: 0 auto;
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.sidebar {
+  width: 20%;
+  float: left;
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+  display: inline-block;
+  background-color: #272822;
+  color: #FFFFFF;
+  padding: 12px;
+}
+
+.sidebar h2 {
+  margin: 0;
+  padding: 12px 0;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.sidebar p {
+  margin: 0 15px;
+}
+
+.main {
+  width: 80%;
+  float: right;
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+  display: inline-block;
+}
+
+.main h1 {
+  margin: 0;
+  padding: 12px;
+}
+
+input[type=submit] {
+  box-sizing: border-box;
+  outline: none;
+  height: 100%;
+  width: 150px;
+  padding: 5px;
+  border: 0;
+  font-weight: bold;
+  border-left: 4px solid #FFFFFF;
+  float: right
 }
 
 form.expand {
   font-size: 200%;
+  background-color: #31B0D5;
+  color: #FFFFFF;
 }
 
 input {
   font-size: inherit;
+  background: none;
+  color: #FFFFFF;
 }
 
 .netlist {
   border: 0;
   outline: none;
-  border-bottom: 5px dashed #31B0D5;
   padding: 5px;
+  padding-left: 12px;
+  margin: 0;
   box-sizing: border-box;
-  width: calc(99% - 140px);
+  width: calc(99% - 150px);
 }
 
-.expand input[type=submit] {
-  box-sizing: border-box;
-  outline: none;
-  width: 140px;
-  margin-right: 0px;
-  border: 0;
-  background-color: #FFFFFF;
-  color: #31B0D5;
-  height: 53px;
-  font-weight: bold;
-}
-
-.connects {
+form.connects {
   text-align: center;
+  background-color: #F0AD4E;
   display: none;
 }
 
 .cnums {
   border: 0;
   outline: none;
-  border-bottom: 3px dashed #F0AD4E;
   padding: 5px;
+  margin: 0;
   box-sizing: border-box;
-  width: 40px;
-}
-
-.connects input[type=submit] {
-  box-sizing: border-box;
-  outline: none;
-  margin-right: 0px;
-  border: 0;
-  background-color: #FFFFFF;
-  color: #F0AD4E;
-  height: 53px;
-  font-weight: bold;
+  width: calc(99% - 150px);
 }
 
 .errors {
@@ -64,7 +97,7 @@ input {
 }
 
 .expansion {
-  margin: 20px 50px;
+  text-align: center;
   font-size: 30px;
   line-height: 50px;
   color: #999999;
@@ -72,13 +105,17 @@ input {
 
 ::-webkit-input-placeholder {
   font-style: italic;
+  color: #FFFFFF;
 }
 ::-moz-placeholder {
   font-style: italic;
+  color: #FFFFFF;
 }
 :-ms-input-placeholder {
   font-style: italic;
+  color: #FFFFFF;
 }
 input:-moz-placeholder {
   font-style: italic;
+  color: #FFFFFF;
 }

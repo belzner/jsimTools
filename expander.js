@@ -1,31 +1,4 @@
 /*
- * Components in the JSim standard cell library
- */
-var components = {
-  'constant'  : 1,
-  'inverter'  : 2,
-  'buffer'    : 2,
-  'tristate'  : 3,
-  'and2'      : 3,
-  'and3'      : 4,
-  'and4'      : 5,
-  'nand2'     : 3,
-  'nand3'     : 4,
-  'nand4'     : 5,
-  'or2'       : 3,
-  'or3'       : 4,
-  'or4'       : 5,
-  'nor2'      : 3,
-  'nor3'      : 4,
-  'nor4'      : 5,
-  'xor2'      : 3,
-  'xnor2'     : 3,
-  'mux2'      : 4,
-  'mux4'      : 7,
-  'dreg'      : 3
-};
-
-/*
  * function flattenNetlist(comps)
  *
  * Takes a (potentially complex) list of components
@@ -40,7 +13,7 @@ function flattenNetlist(comps) {
     numDupes = 1;
     comp = comps[i]
     hasDupe = comp.match(dupesRe);
-    if (hasDupe && hasDupe.length == 1) {
+    if (hasDupe && hasDupe.length === 1) {
       numDupes = parseInt(hasDupe[0].slice(1));
       comp = comp.replace(dupesRe, '');
     }
@@ -88,7 +61,7 @@ function setupNetlist(id, type, connections, comps) {
     return null;
   }
   numcomps = flattened.length / connections;
-  if (numcomps == Math.floor(numcomps)) {
+  if (numcomps === Math.floor(numcomps)) {
     comps = [];
     for (var i = 0; i < numcomps; i++) {
       curcomp = id + '_' + i + ' ' + type;
@@ -120,7 +93,8 @@ function getNetlist(code) {
   if (!connections) {
     $('input.saved').val(code);
     $('input.cnums').val('');
-    $('.connects .type').text(netlist[1]);
+    $('input.type').val(netlist[1]);
+    $('input.cnums').attr('placeholder', 'Unrecognized device: ' + netlist[1] + '. How many connections does it have?');
     $('.connects').show();
     $('input.cnums').focus();
     return null;
@@ -163,9 +137,9 @@ $('.connects').submit(function(e) {
   e.preventDefault();
   $('.errors').empty();
   var cnum = parseInt($('input.cnums').val());
-  var comp = $('.connects .type').text();
+  var comp = $('input.type').val();
   if (cnum && comp) {
-    components[comp] = cnum;
+    $('.components').trigger('add', [comp, cnum]);
     $('.connects').hide();
     var code = $('input.saved').val();
     var expanded = getNetlist(code);

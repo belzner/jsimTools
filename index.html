@@ -8,19 +8,28 @@
 </head>
 
 <body>
-  <h1>JSim Netlist Expander</h1>
-  <form class="expand">
-    <input type="text" class="netlist" placeholder="Xid component nodes">
-    <input type="submit" value="Expand">
-  </form>
-  <form class="connects">
-    Unrecognized device: <span class="type"></span>. How many connections does it have? <input type="text" class="cnums">
-    <input type="submit" value="Set">
-    <input type="hidden" value="" class="saved">
-  </form>
-  <div class="errors"></div>
-  <div class="expansion"></div>
+  <div class="sidebar">
+    <div class="components">
+      <h2>Currently Defined Components</h2>
+    </div>
+  </div>
+  <div class="main">
+    <h1>JSim Netlist Expander</h1>
+    <form class="expand">
+      <input type="text" class="netlist" placeholder="Xid component nodes">
+      <input type="submit" value="Expand">
+    </form>
+    <form class="connects">
+      <input type="text" class="cnums">
+      <input type="submit" value="Set">
+      <input type="hidden" value="" class="saved">
+      <input type="hidden" value="" class="type">
+    </form>
+    <div class="errors"></div>
+    <div class="expansion"></div>
+  </div>
 </body>
 
+<script src="components.js"></script>
 <script src="expander.js"></script>
 </html>

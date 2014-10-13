@@ -82,16 +82,8 @@ function flattenNetlist(comps) {
  * Takes a parsed (potentially complex) netlist and flattens it
  * then separates it into individual components
  */
-function setupNetlist(id, type, comps) {
+function setupNetlist(id, type, connections, comps) {
   flattened = flattenNetlist(comps);
-  connections = components[type];
-  if (!connections) {
-    $('input.cnums').val('');
-    $('.connects .type').text(type);
-    $('.connects').show();
-    $('input.cnums').focus();
-    return null;
-  }
   if (!flattened) {
     return null;
   }
@@ -116,26 +108,37 @@ function setupNetlist(id, type, comps) {
 /*
  * function getNetlist(id, type, comps)
  *
- * Parses user input into a netlist description
+ * Parses user input into a netlist description and processes it
  */
-function getNetlist() {
-  var code = $('input.netlist').val();
+function getNetlist(code) {
   var netlist = code.split(' ').filter(function(i) {return i;});
-  return netlist;
+  if (netlist.length < 3 || netlist[0][0].toUpperCase() != 'X') {
+    $('.errors').append('<p>All declarations must be in the following format: <i>Xid component nodes</i>.</p>');
+    return null;
+  }
+  connections = components[netlist[1]];
+  if (!connections) {
+    $('input.saved').val(code);
+    $('input.cnums').val('');
+    $('.connects .type').text(netlist[1]);
+    $('.connects').show();
+    $('input.cnums').focus();
+    return null;
+  }
+  var setup = setupNetlist(netlist[0], netlist[1], connections, netlist.slice(2));
+  return setup;
 }
 
 /*
  * function showNetlist(id, type, comps)
  *
- * Takes a parsed netlist and processes it
- * then displays it on the page.
+ * Takes a processed netlist and displays it on the page.
  */
-function showNetlist(netlist) {
-  var setup = setupNetlist(netlist[0], netlist[1], netlist.slice(2));
-  if (setup) {
-    for (var i = 0; i < setup.length; i++) {
+function showNetlist(expanded) {
+  if (expanded) {
+    for (var i = 0; i < expanded.length; i++) {
       $('.errors').empty();
-      $('.expansion').append(setup[i] + '<br>');
+      $('.expansion').append(expanded[i] + '<br>');
     }
   }
 }
@@ -148,8 +151,9 @@ $('.expand').submit(function(e) {
   $('.connects').hide();
   $('.errors').empty();
   $('.expansion').empty();
-  var netlist = getNetlist();
-  showNetlist(netlist);
+  var code = $('input.netlist').val();
+  var expanded = getNetlist(code);
+  showNetlist(expanded);
 });
 
 /*
@@ -157,12 +161,15 @@ $('.expand').submit(function(e) {
  */
 $('.connects').submit(function(e) {
   e.preventDefault();
-  var netlist = getNetlist();
+  $('.errors').empty();
   var cnum = parseInt($('input.cnums').val());
-  if (cnum && netlist) {
-    components[netlist[1]] = cnum;
+  var comp = $('.connects .type').text();
+  if (cnum && comp) {
+    components[comp] = cnum;
     $('.connects').hide();
-    showNetlist(netlist);
+    var code = $('input.saved').val();
+    var expanded = getNetlist(code);
+    showNetlist(expanded);
   }
   else {
     $('.errors').append('<p>You must provide an integer number of connections.</p>');
